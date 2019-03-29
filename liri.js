@@ -10,6 +10,7 @@ var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
 var input = process.argv.slice(3).join("+")
 var theSign = process.argv[3];
+var mrNobody = process.argv[3];
 
 //////////////////
 // CONCERT THIS //
@@ -63,7 +64,37 @@ function spotifyThis(){
 }
 
 
+////////////////
+// MOVIE THIS //
+////////////////
+function movieThis() {
+     if(mrNobody === undefined) {
+          input = "Mr. Nobody"
+     };
 
+     axios.get("http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy")
+     .then(function(response) {
+          console.log("\n=======================================================================\n");
+//     Title of the movie.
+          console.log("Title: " + response.data.Title);
+//     Year the movie came out.
+          console.log("Release Date: " + response.data.Year);
+//     IMDB Rating of the movie.
+          console.log("IMDB Rating: " + response.data.imdbRating);
+//     Rotten Tomatoes Rating of the movie.
+          console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+//     Country where the movie was produced.
+          console.log("Country: " + response.data.Country);
+//     Language of the movie.
+          console.log("Language: " + response.data.Language);
+//     Plot of the movie.
+          console.log("Plot: " + response.data.Plot);
+//     Actors in the movie.
+          console.log("Actors: " + response.data.Actors);
+          console.log("\n=======================================================================\n");
+  }
+);
+}
 
 ////////////////////////////////
 // Main function for commands //
