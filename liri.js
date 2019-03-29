@@ -2,24 +2,28 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var Spotify = require('node-spotify-api');
 var moment = require('moment');
-moment().format();
 var axios = require("axios");
+var fs = require("fs");
 var spotify = new Spotify(keys.spotify);
-var input = process.argv.slice(3).join("+")
+
+//// variables for user input ////
 var command = process.argv[2];
+var input = process.argv.slice(3).join("+")
+var theSign = process.argv[3];
 
 //////////////////
-// CONCERT-THIS //
+// CONCERT THIS //
 /////////////////
 function concertThis() {
      axios.get("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp").then
      (function(response){
+          //limit to 10 events//
           for(var i = 0; i < 11; i++){
           console.log("Event " + i);
           console.log("Venue Name : " + response.data[i].venue.name);
           console.log("Venue Location : " + response.data[i].venue.city + ", " + response.data[i].venue.country);
           console.log("Date of Event : " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
-          console.log("\n==========================================\n");
+          console.log("\n=======================================================================\n");
           }
      },
      function(error) {
@@ -39,18 +43,25 @@ function concertThis() {
 // SPOTIFY THIS SONG //
 ///////////////////////
 function spotifyThis(){
+     // for undefined search
+     if(theSign === undefined) {
+          input = "The Sign Ace of Base"
+     };
+
      spotify.search({ type: 'track', query: input }, function(err, data) {
           if (err) {
-            return console.log("No songs are found: " + err);
+            return console.log("Sorry, no songs are found: " + err);
           }
+          // normal search
+          console.log("\n=======================================================================\n");
           console.log("Artist(s): " + data.tracks.items[0].artists[0].name);
           console.log("Song Title: " + data.tracks.items[0].name);
-          console.log("Preview Link " + data.tracks.items[0].preview_url);
+          console.log("Click here for a preview: " + data.tracks.items[0].preview_url);
           console.log("Album: " + data.tracks.items[0].album.name);
-
-        });
+          console.log("\n=======================================================================\n");
+     });
 }
-      
+
 
 
 
