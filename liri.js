@@ -18,8 +18,7 @@ var mrNobody = process.argv[3];
 function concertThis() {
      axios.get("https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp").then
      (function(response){
-          //limit to 10 events//
-          for(var i = 0; i < 11; i++){
+          for(var i = 0; i < response.data.length; i++){
           console.log("Event " + i);
           console.log("Venue Name : " + response.data[i].venue.name);
           console.log("Venue Location : " + response.data[i].venue.city + ", " + response.data[i].venue.country);
@@ -75,30 +74,44 @@ function movieThis() {
      axios.get("http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy")
      .then(function(response) {
           console.log("\n=======================================================================\n");
-//     Title of the movie.
           console.log("Title: " + response.data.Title);
-//     Year the movie came out.
           console.log("Release Date: " + response.data.Year);
-//     IMDB Rating of the movie.
           console.log("IMDB Rating: " + response.data.imdbRating);
-//     Rotten Tomatoes Rating of the movie.
           console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
-//     Country where the movie was produced.
           console.log("Country: " + response.data.Country);
-//     Language of the movie.
           console.log("Language: " + response.data.Language);
-//     Plot of the movie.
           console.log("Plot: " + response.data.Plot);
-//     Actors in the movie.
           console.log("Actors: " + response.data.Actors);
           console.log("\n=======================================================================\n");
   }
 );
 }
 
-////////////////////////////////
-// Main function for commands //
-////////////////////////////////
+
+/////////////////////
+// DO WHAT IT SAYS //
+/////////////////////
+function doWhatItSays() {
+     fs.readFile("random.txt", "utf8", function(error, data) {
+          if (error) {
+               return console.log(error);
+          }
+
+          var dataArr = data.split(","); // [ 'concert-this', ' "ZHU"' ] //
+          // set to command line
+          command = dataArr[0];
+          input = dataArr[1].trim();
+          console.log(command + input);
+
+          //run function
+          liriBot();
+     })
+}
+
+
+////////////////////////////
+// MAIN COMMAND FUNCTIONS //
+////////////////////////////
 function liriBot() {
      switch(command){
      case "concert-this" :
